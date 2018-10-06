@@ -1,0 +1,121 @@
+#
+Installation:
+==============
+#
+Supported Platforms-
+	- Docker is supported on
+		- Linux platforms
+			Ubuntu, RHEL, CentOs..etc.
+		- Windows   (Using virtual environment)
+		- OS X 		(Using virtual environment)
+	
+	- Windows and OS X:
+		- Windows Docker installer contains a tiny Linux 
+		virtual machine. Docker creates container on top
+		of this tiny Linux VM.
+		  
+	- Cloud Platforms
+		Amazon EC2
+		Rackspace Cloud
+		Google compute Engine..etc.
+
+Requirements:
+	- 64-bit architecture	  
+	- Linux 3.8 or later Kernel versions
+	- Kerner must support an appropriate Storage
+	  driver (Examples of storage drivers: Device Mapper
+		(ubuntu default), aufs.
+
+
+#
+Requirements Check:
+	- Kernel
+		$ uname -a /-r
+			NOTE: Kernel can also be upgraded.
+
+	- Storage driver (device-mapper)
+		Docker requires storage to create images on 
+		a file system.	
+		$ cat /proc/devices
+
+#
+Docker Installation On Ubuntu:
+===========================
+	- Check OS name:
+		$ lsb_release -a / -cs
+		$ cat /etc/os-release	
+
+#
+Remove old installations(if any)
+
+uninstall old docker:
+		$ sudo apt-get remove docker docker-engine
+
+uninstall new docker:
+		$ sudo apt-get remove docker-ce
+
+Installation Steps:
+=====================	
+1. - Install packages to allow apt to use a repository over HTTPS.
+		$ sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+	
+	
+2. Add Docker’s official GPG key(Gnu's Privacy Guard):
+		$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	
+3. Setup Stable repository:
+		$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	
+4. Update apt package index:
+		$ sudo apt-get update
+	
+5. Install Latest version of Docker
+		$ sudo apt-get install docker-ce
+
+#
+Installation Check
+sudo docker --version
+docker run hello-world
+	
+#
+Uninstall Docker:
+	- Remove Docker Installation:
+		$ sudo apt-get purge docker-ce
+		
+	- Delete all images, containers, and volumes from
+		$ sudo rm -rf /var/lib/docker
+
+
+#
+Manage/Run Docker as a non-root user/ Run docker command without sudo.	
+======================================
+	- By default the docker daemon binds to a Unix socket.
+	- This Unix socket is owned by root user.
+
+	- Socket:
+		- Sockets allow communication between two 
+		different processes on the same or different 
+		machines. 
+			
+	- So, If you don't want to use sudo when you run docker
+	  configure below:
+	  	- Create Unix group called docker
+	  	- Add the users to docker group
+	  	- when the docker daemon starts, it provides
+	  	  read/write permissions to docker group. So you can access Unix socket as normal user.
+
+	1. Create the docker group
+		$ sudo groupadd docker
+	2. Add your user to this group
+		$ sudo usermod -aG docker $USER
+	3. Logout and Log back so that your group membership
+	   is re-evaluated.
+	4. Verify docker run with your user
+	   $ docker run hello-world
+
+	5. Check group existance:
+		$ sudo grep docker /etc/group
+
+	6. Delete the group
+		$ sudo groupdel docker
+
